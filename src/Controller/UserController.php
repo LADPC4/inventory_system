@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\UserRegistrationService;
 use App\Service\UserEditService;
+use App\Service\UserSortingService;
+use App\Service\UserPasswordService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,24 +17,30 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\UserRegistrationType;
 
+#[Route('/user')]
 class UserController extends AbstractController
 {
     private UserRegistrationService $registrationService;
     private UserEditService $editService;
+    private UserSortingService $sortingService;
 
-    public function __construct(UserRegistrationService $registrationService, UserEditService $editService)
+    public function __construct(UserSortingService $sortingService, UserRegistrationService $registrationService, UserEditService $editService)
     {
+        $this->sortingService = $sortingService;
         $this->registrationService = $registrationService;
         $this->editService = $editService;
     }
 
-    #[Route('/users', name: 'user_index', methods: ['GET'])]
+    #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
+        $sortedUsers = $this->sortingService->sortUsers($users);
+
+        // dd($sortedUsers);
 
         return $this->render('user/index.html.twig', [
-            'users' => $users,
+            'users' => $sortedUsers,
         ]);
     }
 
@@ -39,13 +48,13 @@ class UserController extends AbstractController
     public function register(Request $request): Response
     {
         $user = new User();
-        $form = $this->createForm(UserRegistrationType::class, $user);
+        $form = $this->createForm(UserRegistrationType::class, $user, ['is_default' => true]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->registrationService->register($user, $form);
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/register.html.twig', [
@@ -62,22 +71,40 @@ class UserController extends AbstractController
             throw $this->createNotFoundException('User not found');
         }
 
-        $form = $this->createForm(UserRegistrationType::class, $user);
+        $form = $this->createForm(UserRegistrationType::class, $user, ['is_edit' => true]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->editService->edit($user, $form);
 
-            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('user/edit.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'user' => $user,
         ]);
     }
 
-    #[Route('/users/{id}/delete', name: 'user_delete', methods: ['POST'])]
+    #[Route('/{id}/cpass', name: 'app_user_cpass', methods: ['GET', 'POST'])]
+    public function cpass(Request $request, User $user, UserPasswordService $userPasswordService): Response
+    {
+        $form = $this->createForm(UserRegistrationType::class, $user, ['is_cpass' => true]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userPasswordService->changePassword($user, $user->getPassword());
+
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('user/changepass.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
     public function delete(User $user, EntityManagerInterface $em): RedirectResponse
     {
         $em->remove($user);
@@ -85,10 +112,10 @@ class UserController extends AbstractController
 
         $this->addFlash('success', 'User deleted successfully.');
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('app_user_index');
     }
 
-    #[Route('/users/{id}', name: 'user_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render('user/show.html.twig', [

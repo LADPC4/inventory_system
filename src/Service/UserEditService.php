@@ -19,11 +19,11 @@ class UserEditService
 
     public function edit(User $user, $form): User
     {
-        $password = $form->get('password')->getData();
-        if ($password) {
-            $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
-            $user->setPassword($hashedPassword);
-        }
+        // $password = $form->get('password')->getData();
+        // if ($password) {
+        //     $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
+        //     $user->setPassword($hashedPassword);
+        // }
 
         $roles = explode(',', $form->get('roles')->getData());
         $user->setRoles(array_map('trim', $roles));

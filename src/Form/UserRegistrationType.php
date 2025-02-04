@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -31,17 +32,18 @@ class UserRegistrationType extends AbstractType
                 'Admin' => 'ROLE_ADMIN',
             ];
         }
+
+        
+        if ($options['is_default']) {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Email'
+                'label' => false,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Password'
+                'label' => false,
+                'attr' => ['class' => 'form-control'],
             ])
-            // ->add('roles', TextType::class, [
-            //     'label' => 'Role',
-            //     'mapped' => false, // Will be processed manually in controller
-            // ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'Active' => 'Active',
@@ -71,13 +73,73 @@ class UserRegistrationType extends AbstractType
                 'label' => false, // Keep it mapped correctly
                 'mapped' => true, // This must be TRUE
                 'by_reference' => true,
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-success shadow-sm'],
             ]);
+        }
+        elseif ($options['is_edit']) {
+        $builder
+            ->add('email', EmailType::class, [
+                'label' => false,
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Active' => 'Active',
+                    'Inactive' => 'Inactive',
+                ],
+                'multiple' => false, // Allow only one selection
+                'expanded' => false, // Render as dropdown (not radio buttons)
+                'required' => true,
+                'data' => $options['data']->getStatus()[0] ?? null, // Set default value
+                'mapped' => false, // Prevent direct mapping
+                'label' => false,
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('roles', ChoiceType::class, [
+                'choices' => $roleChoices,  // Use the modified choices
+                'placeholder' => 'Choose Role',
+                'multiple' => false, // Allow only one selection
+                'expanded' => false, // Render as dropdown (not radio buttons)
+                'required' => true,
+                'data' => $options['data']->getRoles()[0] ?? null, // Set default value
+                'mapped' => false, // Prevent direct mapping
+                'disabled' => $isAdmin,
+                'label' => false,
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('userInfo', UserInfoType::class, [
+                'label' => false, // Keep it mapped correctly
+                'mapped' => true, // This must be TRUE
+                'by_reference' => true,
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-success shadow-sm'],
+            ]);
+        }
+
+        elseif ($options['is_cpass']) {
+            $builder
+            ->add('password', PasswordType::class, [
+                'label' => false,
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('save', SubmitType::class, [
+                // 'label' => 'Update User',
+                'attr' => ['class' => 'btn btn-success shadow-sm'],
+            ])
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'is_default' => false,
+            'is_edit' => false,
+            'is_cpass' => false,
         ]);
     }
 }

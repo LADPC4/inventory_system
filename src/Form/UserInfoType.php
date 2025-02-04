@@ -14,36 +14,44 @@ class UserInfoType extends AbstractType
     {
         $builder
             ->add('fn', TextType::class, [
-                'label' => 'First Name',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('mn', TextType::class, [
-                'label' => 'Middle Name',
+                'label' => false,
                 'required' => false,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('ln', TextType::class, [
-                'label' => 'Last Name',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('office', TextType::class, [
-                'label' => 'Office',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('division', TextType::class, [
-                'label' => 'Division',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('position', TextType::class, [
-                'label' => 'Position',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('phone', TextType::class, [
-                'label' => 'Phone Number',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('address', TextType::class, [
-                'label' => 'Address',
+                'label' => false,
                 'required' => true,
+                'attr' => ['class' => 'form-control'],
             ]);
     }
 

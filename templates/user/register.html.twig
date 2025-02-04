@@ -1,5 +1,151 @@
-{# templates/user/register.html.twig #}
+{% extends 'page.html.twig' %}
 
+{% block title %}Profile Page{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    <div class="pagetitle">
+        <h1>Create User</h1>
+        <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+            <li class="breadcrumb-item"><a href="/user">User</a></li>
+            <li class="breadcrumb-item active">New User</li>
+        </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+
+                <div class="card">
+                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                        <img src="{{ asset('assets/nice-admin/img/profile.jpg') }}" alt="Profile" class="rounded-circle">
+                        <h2>New User</h2>
+                            Form
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xl-8">
+
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-create">Create Profile</button>
+                        </li>
+
+                        </ul>
+                        <div class="tab-content pt-2">
+
+                            <div class="tab-pane fade profile-edit pt-3 active show" id="profile-create">
+                            
+                                {{ form_start(form) }}
+                                    <div class="row mb-3">
+                                        <label for="fn" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.fn) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="mn" class="col-md-4 col-lg-3 col-form-label">Middle Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.mn) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="ln" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.ln) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="office" class="col-md-4 col-lg-3 col-form-label">Office</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.office) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="division" class="col-md-4 col-lg-3 col-form-label">Division</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.division) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="position" class="col-md-4 col-lg-3 col-form-label">Position</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.position) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.phone) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="address" class="col-md-4 col-lg-3 col-form-label">Address</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.userInfo.address) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.email) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="password" class="col-md-4 col-lg-3 col-form-label">Password</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.password) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="roles" class="col-md-4 col-lg-3 col-form-label">Role</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.roles) }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="status" class="col-md-4 col-lg-3 col-form-label">Status</label>
+                                        <div class="col-md-8 col-lg-9">
+                                        {{ form_row(form.status) }}
+                                        </div>
+                                    </div>
+                                
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary shadow-sm">
+                                            <i class="bi bi-arrow-left-circle"></i> Back to User List
+                                        </a>
+
+                                        {{ form_widget(form.save, {
+                                            'attr': {'class': 'btn btn-primary shadow-sm'},
+                                            'label': 'Register'
+                                        }) }}
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{# templates/user/register.html.twig #}
+{# 
 {% extends 'base.html.twig' %}
 
 {% block title %}Register{% endblock %}
@@ -24,4 +170,4 @@
 
         <button type="submit" class="btn btn-primary">Register</button>
     {{ form_end(form) }}
-{% endblock %}
+{% endblock %} #}

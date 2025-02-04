@@ -21,21 +21,21 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // User fields
-        $builder->add('email', EmailType::class);
-        $builder->add('password', PasswordType::class);
-        $builder->add('roles', ChoiceType::class, [
+        $builder
+        ->add('email', EmailType::class)
+        ->add('password', PasswordType::class)
+        ->add('roles', ChoiceType::class, [
             'choices' => [
                 'Admin' => 'ROLE_ADMIN',
                 'User' => 'ROLE_USER',
             ],
             'multiple' => true,
+        ])
+        ->add('userInfo', UserInfoType::class)
+        ->add('save', SubmitType::class, [
+            'attr' => ['class' => 'btn btn-success shadow-sm'],
         ]);
 
-        // UserInfo fields
-        $builder->add('userInfo', UserInfoType::class);  // Ensure this line is here
-
-        // Submit button
-        $builder->add('save', SubmitType::class, ['label' => 'Save']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
