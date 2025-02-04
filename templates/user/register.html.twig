@@ -1,0 +1,27 @@
+{# templates/user/register.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <h1>Register</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password) }}
+        {{ form_row(form.status) }}
+        {{ form_row(form.roles) }}
+        {{ form_row(form.userInfo.fn) }}
+        {{ form_row(form.userInfo.mn) }}
+        {{ form_row(form.userInfo.ln) }}
+        {{ form_row(form.userInfo.office) }}
+        {{ form_row(form.userInfo.division) }}
+        {{ form_row(form.userInfo.position) }}
+        {{ form_row(form.userInfo.phone) }}
+        {{ form_row(form.userInfo.address) }}
+
+
+        <button type="submit" class="btn btn-primary">Register</button>
+    {{ form_end(form) }}
+{% endblock %}

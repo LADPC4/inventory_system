@@ -1,0 +1,60 @@
+{# templates/user/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block body %}
+    <h1>User Details</h1>
+
+    <table class="table">
+        <tr>
+            <th>Full Name</th>
+            <td>{{ user.userInfo.name }}</td>
+        </tr>
+        <tr>
+            <th>Office</th>
+            <td>{{ user.userInfo.office }}</td>
+        </tr>
+        <tr>
+            <th>Division</th>
+            <td>{{ user.userInfo.division }}</td>
+        </tr>
+        <tr>
+            <th>Position</th>
+            <td>{{ user.userInfo.position }}</td>
+        </tr>
+        <tr>
+            <th>Phone</th>
+            <td>{{ user.userInfo.phone }}</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td>{{ user.userInfo.address }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Roles</th>
+            <td>
+            {% if 'ROLE_ADMIN' in user.roles %}
+                Admin
+            {% elseif 'ROLE_PLANTILLA' in user.roles %}
+                Plantilla
+            {% elseif 'ROLE_COS' in user.roles %}
+                COS
+            {% else %}
+                No role has been set. Please contact the administrator.
+            {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ user.status }}</td>
+        </tr>
+    </table>
+
+    <a href="{{ path('user_index') }}" class="btn btn-primary">Back to List</a>
+{% endblock %}
