@@ -35,7 +35,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'user_register')]
+    #[Route('/register', name: 'app_user_register')]
     public function register(Request $request): Response
     {
         $user = new User();
