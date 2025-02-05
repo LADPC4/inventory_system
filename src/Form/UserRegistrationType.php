@@ -7,7 +7,6 @@ use App\Form\UserInfoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,9 +18,12 @@ class UserRegistrationType extends AbstractType
     {
         $user = $options['data'];
         $roleChoices = [
-            // 'Admin' => 'ROLE_ADMIN',
             'Plantilla' => 'ROLE_PLANTILLA',
             'COS' => 'ROLE_COS',
+        ];
+        $statusChoices = [
+            'Active' => 'Active',
+            'Inactive' => 'Inactive',
         ];
 
         // Check if the user has ROLE_ADMIN
@@ -45,15 +47,13 @@ class UserRegistrationType extends AbstractType
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'Active' => 'Active',
-                    'Inactive' => 'Inactive',
-                ],
+                'choices' => $statusChoices,  // Use the modified choices
+                'placeholder' => 'Choose Status',
                 'multiple' => false, // Allow only one selection
                 'expanded' => false, // Render as dropdown (not radio buttons)
                 'required' => true,
                 'data' => $options['data']->getStatus()[0] ?? null, // Set default value
-                'mapped' => false, // Prevent direct mapping
+                'mapped' => true,
                 'label' => false,
                 'attr' => ['class' => 'form-control'],
             ])
@@ -85,15 +85,14 @@ class UserRegistrationType extends AbstractType
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'Active' => 'Active',
-                    'Inactive' => 'Inactive',
-                ],
+                'choices' => $statusChoices,  // Use the modified choices
+                'placeholder' => 'Choose Status',
                 'multiple' => false, // Allow only one selection
                 'expanded' => false, // Render as dropdown (not radio buttons)
                 'required' => true,
-                'data' => $options['data']->getStatus()[0] ?? null, // Set default value
-                'mapped' => false, // Prevent direct mapping
+                // 'data' => $options['data']->getStatus()[0] ?? null, // Set default value
+                'data' => $options['data']->getStatus() ?? null,
+                'mapped' => true,
                 'label' => false,
                 'attr' => ['class' => 'form-control'],
             ])

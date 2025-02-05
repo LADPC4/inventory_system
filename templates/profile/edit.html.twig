@@ -1,14 +1,14 @@
 {% extends 'page.html.twig' %}
 
-{% block title %}User Details{% endblock %}
+{% block title %}Edit Profile{% endblock %}
 
 {% block body %}
 <div class="pagetitle">
-    <h1>Edit User</h1>
+    <h1>Edit Profile</h1>
     <nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/home">Home</a></li>
-        <li class="breadcrumb-item"><a href="/user">User</a></li>
+        <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
         <li class="breadcrumb-item active">{{ user.userInfo.name }}</li>
     </ol>
     </nav>
@@ -46,7 +46,7 @@
                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" onclick="window.location='{{ path('app_user_cpass', {'id': user.id}) }}';">Change Password</button>
+                        <button class="nav-link" onclick="window.location='{{ path('app_profile_cpass', {'id': user.id}) }}';">Change Password</button>
                     </li>
                     </ul>
                     <div class="tab-content pt-2">
@@ -103,38 +103,43 @@
                                 <div class="row mb-3">
                                     <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                                     <div class="col-md-8 col-lg-9">
-                                    {{ form_row(form.email) }}
+                                    {# {{ form_row(form.email) }} #}
+                                    {{ form_row(form.email, {'attr': {'readonly': 'readonly'}}) }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="roles" class="col-md-4 col-lg-3 col-form-label">Role</label>
                                     <div class="col-md-8 col-lg-9">
-                                    {{ form_row(form.roles) }}
+                                    {# {{ form_row(form.roles, {'attr': {'readonly': 'readonly'}}) }} #}
+                                    {{ form_widget(form.roles, {'attr': {'disabled': 'disabled'}}) }}
+                                    <input type="hidden" name="{{ form.roles.vars.full_name }}" value="{{ form.roles.vars.value }}">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="status" class="col-md-4 col-lg-3 col-form-label">Status</label>
                                     <div class="col-md-8 col-lg-9">
-                                    {{ form_row(form.status) }}
+                                    {# {{ form_row(form.status, {'attr': {'readonly': 'readonly'}}) }} #}
+                                    {{ form_widget(form.status, {'attr': {'disabled': 'disabled'}}) }}
+                                    <input type="hidden" name="{{ form.status.vars.full_name }}" value="{{ form.status.vars.value }}">
+
                                     </div>
                                 </div>
                                 
                                 {# <div class="d-flex justify-content-between align-items-center mt-4">
-                                    <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary shadow-sm">
-                                        <i class="bi bi-arrow-left-circle"></i> Back to User List
+                                    <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary shadow-sm">
+                                        <i class="bi bi-arrow-left-circle"></i> Back to Overviews
                                     </a>
 
                                     {{ form_widget(form.save, {
                                         'attr': {'class': 'btn btn-primary shadow-sm'},
                                         'label': 'Save Changes'
                                     }) }}
-                                </div>
-                                 #}
+                                </div> #}
 
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 label">
-                                        <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary shadow-sm my-1">
-                                            Back to User List
+                                        <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary shadow-sm my-1">
+                                            Back to Overview
                                         </a>
                                         {# <a href="javascript:history.back()" class="btn btn-outline-secondary shadow-sm my-1">
                                             Back
@@ -159,3 +164,31 @@
     </div>
 </section>
 {% endblock %}
+
+{# {% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <h1>Edit User</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password) }}
+        {{ form_row(form.status) }}
+        {{ form_row(form.roles) }}
+        {{ form_row(form.userInfo.fn) }}
+        {{ form_row(form.userInfo.mn) }}
+        {{ form_row(form.userInfo.ln) }}
+        {{ form_row(form.userInfo.office) }}
+        {{ form_row(form.userInfo.division) }}
+        {{ form_row(form.userInfo.position) }}
+        {{ form_row(form.userInfo.phone) }}
+        {{ form_row(form.userInfo.address) }}
+
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    {{ form_end(form) }}
+    
+    <a href="{{ path('app_user_index') }}">Back to list</a>
+{% endblock %} #}

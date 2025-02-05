@@ -15,4 +15,20 @@ final class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
+
+    #[Route('/unauthorized', name: 'app_unauthorized')]
+    public function unauthorized(): Response
+    {
+        return $this->render('home/unauthorized.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
+    #[Route('/notfound', name: 'app_notfound')]
+    public function notfound(): Response
+    {
+        return $this->render('home/notfound.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
 }

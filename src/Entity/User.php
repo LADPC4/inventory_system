@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -43,9 +45,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: "App\Entity\UserInfo", mappedBy: "user", cascade: ["persist", "remove"])]
     private $userInfo;
 
+    /**
+     * @var Collection<int, Units>
+     */
+    #[ORM\OneToMany(targetEntity: Units::class, mappedBy: 'modifiedBy')]
+    private Collection $units;
+
     public function __construct()
     {
         // $this->userInfo = new UserInfo(); // Ensure Us
+        $this->units = new ArrayCollection();
     }
 
     public function setUserInfo(UserInfo $userInfo): self
@@ -164,5 +173,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Units>
+     */
+    public function getUnits(): Collection
+    {
+        return $this->units;
+    }
+
+    public function addUnit(Units $unit): static
+    {
+        if (!$this->units->contains($unit)) {
+            $this->units->add($unit);
+            $unit->setModifiedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUnit(Units $unit): static
+    {
+        if ($this->units->removeElement($unit)) {
+            // set the owning side to null (unless already changed)
+            if ($unit->getModifiedBy() === $this) {
+                $unit->setModifiedBy(null);
+            }
+        }
+
+        return $this;
     }
 }
