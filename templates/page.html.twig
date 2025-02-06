@@ -41,12 +41,12 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-        <i class="bi bi-list toggle-sidebar-btn"></i>
         <a href="/home" class="logo d-flex align-items-center">
             <img src="{{ asset('assets/nice-admin/img/SDD-Logo.png') }}" alt="Logo">
             <span class="d-none d-lg-block">Inventory System</span>
         </a>
         </div><!-- End Logo -->
+        <i class="bi bi-list toggle-sidebar-btn"></i>
 
         <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
@@ -147,7 +147,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#item-masterlist" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-menu-button-wide"></i><span>Item Masterlist</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-journal-text"></i><span>Item Masterlist</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="item-masterlist" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
@@ -171,7 +171,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/activity_code">
                     <i class="bi bi-circle"></i><span>Activity Code</span>
                     </a>
                 </li>
@@ -192,9 +192,14 @@
     </aside><!-- End Sidebar-->
 
     <main id="main" class="main">
+        {# {% if app.user is not null and app.user.status != 'Active' %}
+            <script type="text/javascript">
+                window.location.href = '{{ path('app_inactive') }}';
+            </script>
+        {% else %} #}
+            {% block body %}{% endblock %}
 
-        {% block body %}{% endblock %}
-
+        {# {% endif %} #}
     </main><!-- End #main -->
 
     <!-- ======= Footer ======= -->
@@ -223,7 +228,6 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/nice-admin/js/main.js') }}"></script>
-
 </body>
 
 </html>

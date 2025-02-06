@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\UserEditService;
 use App\Service\UserPasswordService;
+use App\Service\UserStatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,21 +18,31 @@ use App\Form\UserRegistrationType;
 class ProfileController extends AbstractController
 {
     private UserEditService $editService;
+    protected UserStatusService $userStatusService;
 
-    public function __construct(UserEditService $editService)
-    {
+    public function __construct(
+        UserEditService $editService,
+        UserStatusService $userStatusService
+    ){
         $this->editService = $editService;
+        $this->userStatusService = $userStatusService;
     }
 
     #[Route('/', name: 'app_profile_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        $status = $this->userStatusService->checkUserStatus();
+
+        if ($status === 'app_inactive') {
+            return $this->redirectToRoute('app_inactive');
+        }
+        
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
         ]);
     }
 
-    #[Route('/edit/{id}', name: 'app_profile_edit')]
+    #[Route('/{id}/edit', name: 'app_profile_edit')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Get the currently logged-in user
@@ -48,6 +59,12 @@ class ProfileController extends AbstractController
         // Check if the logged-in user has the same ID as the one being edited
         if (!$loggeduser instanceof User || $loggeduser->getId() !== $user->getId()) {
             return $this->redirectToRoute('app_unauthorized');
+        }
+
+        $status = $this->userStatusService->checkUserStatus();
+
+        if ($status === 'app_inactive') {
+            return $this->redirectToRoute('app_inactive');
         }
 
         // Create and process the form
@@ -83,6 +100,12 @@ class ProfileController extends AbstractController
         // Check if the logged-in user has the same ID as the one being edited
         if (!$loggeduser instanceof User || $loggeduser->getId() !== $user->getId()) {
             return $this->redirectToRoute('app_unauthorized');
+        }
+        
+        $status = $this->userStatusService->checkUserStatus();
+
+        if ($status === 'app_inactive') {
+            return $this->redirectToRoute('app_inactive');
         }
 
         $form = $this->createForm(UserRegistrationType::class, $user, ['is_cpass' => true]);

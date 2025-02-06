@@ -42,8 +42,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+    // #[ORM\OneToOne(targetEntity: "App\Entity\UserInfo", mappedBy: "user", cascade: ["persist", "remove"])]
+    // private $userInfo;
     #[ORM\OneToOne(targetEntity: "App\Entity\UserInfo", mappedBy: "user", cascade: ["persist", "remove"])]
     private $userInfo;
+
 
     /**
      * @var Collection<int, Units>
@@ -51,10 +54,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Units::class, mappedBy: 'modifiedBy')]
     private Collection $units;
 
+    /**
+     * @var Collection<int, ActivityCode>
+     */
+    #[ORM\OneToMany(targetEntity: ActivityCode::class, mappedBy: 'modifiedBy')]
+    private Collection $activityCodes;
+
     public function __construct()
     {
         // $this->userInfo = new UserInfo(); // Ensure Us
         $this->units = new ArrayCollection();
+        $this->activityCodes = new ArrayCollection();
     }
 
     public function setUserInfo(UserInfo $userInfo): self
@@ -199,6 +209,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($unit->getModifiedBy() === $this) {
                 $unit->setModifiedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActivityCode>
+     */
+    public function getActivityCodes(): Collection
+    {
+        return $this->activityCodes;
+    }
+
+    public function addActivityCode(ActivityCode $activityCode): static
+    {
+        if (!$this->activityCodes->contains($activityCode)) {
+            $this->activityCodes->add($activityCode);
+            $activityCode->setModifiedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityCode(ActivityCode $activityCode): static
+    {
+        if ($this->activityCodes->removeElement($activityCode)) {
+            // set the owning side to null (unless already changed)
+            if ($activityCode->getModifiedBy() === $this) {
+                $activityCode->setModifiedBy(null);
             }
         }
 

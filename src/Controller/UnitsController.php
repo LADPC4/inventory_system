@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Units;
 use App\Form\UnitsType;
 use App\Service\TimeFormatterService;
+use App\Service\UnitsSortingService;
 use App\Repository\UnitsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,16 +17,20 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UnitsController extends AbstractController
 {
     private TimeFormatterService $timeFormatterService;
+    private UnitsSortingService $unitsSortingService;
 
-    public function __construct(TimeFormatterService $timeFormatterService)
+    public function __construct(TimeFormatterService $timeFormatterService, UnitsSortingService $unitsSortingService)
     {
         $this->timeFormatterService = $timeFormatterService;
+        $this->unitsSortingService = $unitsSortingService;
     }
 
     #[Route(name: 'app_units_index', methods: ['GET'])]
     public function index(UnitsRepository $unitsRepository): Response
     {
-        $units = $unitsRepository->findAll();
+        // $units = $unitsRepository->findAll();
+
+        $units = $this->unitsSortingService->sortUnits('name', 'ASC');
         $now = new \DateTimeImmutable();
 
         foreach ($units as $unit) {
@@ -34,7 +39,7 @@ final class UnitsController extends AbstractController
         }
 
         return $this->render('units/index.html.twig', [
-            'units' => $unitsRepository->findAll(),
+            'units' => $units,
         ]);
     }
 
@@ -51,7 +56,7 @@ final class UnitsController extends AbstractController
             $entityManager->persist($unit);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Unit created successfully.');
+            // $this->addFlash('success', 'Unit created successfully.');
 
             return $this->redirectToRoute('app_units_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -81,7 +86,7 @@ final class UnitsController extends AbstractController
             $unit->setModifiedBy($this->getUser());
             $entityManager->flush();
 
-            $this->addFlash('success', 'Unit updated successfully.');
+            // $this->addFlash('success', 'Unit updated successfully.');
             
 
             return $this->redirectToRoute('app_units_index', [], Response::HTTP_SEE_OTHER);

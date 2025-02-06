@@ -1,11 +1,11 @@
 {% extends 'page.html.twig' %}
 
-{% block title %}Profile Page{% endblock %}
+{% block title %}{{ user.userInfo.name }}{% endblock %}
 
 {% block body %}
 <div class="content-wrapper">
     <div class="pagetitle">
-        <h1>Profile</h1>
+        <h1>Edit User</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/home">Home</a></li>

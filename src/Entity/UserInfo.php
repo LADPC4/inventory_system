@@ -43,7 +43,11 @@ class UserInfo
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    // #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?User $user = null;
+
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: "userInfo", cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

@@ -367,17 +367,17 @@
   }
   
   .logo img {
-    max-height: 20px;
+    max-height: 17px;
     margin-right: 6px;
   }
   
   .logo span {
-    font-size: 26px;
+    font-size: 23px;
     font-weight: 700;
     color: #012970;
     font-family: "Nunito", sans-serif;
-    min-width: 500px;
-    padding-left: 10px;
+    max-width: 200px;
+    /* padding-left: 10px; */
   }
   
   .header {

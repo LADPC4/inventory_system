@@ -23,8 +23,11 @@ class UserController extends AbstractController
     private UserEditService $editService;
     private UserSortingService $sortingService;
 
-    public function __construct(UserSortingService $sortingService, UserRegistrationService $registrationService, UserEditService $editService)
-    {
+    public function __construct(
+        UserSortingService $sortingService, 
+        UserRegistrationService $registrationService, 
+        UserEditService $editService
+    ){
         $this->sortingService = $sortingService;
         $this->registrationService = $registrationService;
         $this->editService = $editService;
