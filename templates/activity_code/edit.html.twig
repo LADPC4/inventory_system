@@ -1,4 +1,56 @@
-{% extends 'base.html.twig' %}
+{% extends 'page.html.twig' %}
+
+{% block title %}Edit Activity Code{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="pagetitle">
+        <h1>Edit Activity Code</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                <li class="breadcrumb-item"><a href="/activity_code">Activity Codes</a></li>
+                <li class="breadcrumb-item active">{{ activity_code.activityCode }}</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">Activity Code Details</h5>
+
+                    <!-- Horizontal Form -->
+                    {{ form_start(form) }}
+                        <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Activity Code</label>
+                            <div class="col-sm-10">
+                                {{ form_row(form.activityCode) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 label">
+                                <a href="{{ path('app_activity_code_index') }}" class="btn btn-outline-secondary shadow-sm my-1">
+                                    Back
+                                </a>
+                                {{ form_widget(form.save, {
+                                    'attr': {'class': 'btn btn-primary my-1'},
+                                    'label': 'Save'
+                                }) }}
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+{% endblock %}
+
+{# {% extends 'base.html.twig' %}
 
 {% block title %}Edit ActivityCode{% endblock %}
 
@@ -10,4 +62,4 @@
     <a href="{{ path('app_activity_code_index') }}">back to list</a>
 
     {{ include('activity_code/_delete_form.html.twig') }}
-{% endblock %}
+{% endblock %} #}

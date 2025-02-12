@@ -1,16 +1,16 @@
 {% extends 'page.html.twig' %}
 
-{% block title %}New Unit{% endblock %}
+{% block title %}New Specification{% endblock %}
 
 {% block body %}
 <section class="section">
     <div class="pagetitle">
-        <h1>New Unit</h1>
+        <h1>New Specification</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/home">Home</a></li>
-                <li class="breadcrumb-item"><a href="/units">Units</a></li>
-                <li class="breadcrumb-item active">New Unit</li>
+                <li class="breadcrumb-item">Pages</li>
+                <li class="breadcrumb-item active">New Specification</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -20,7 +20,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                    <h5 class="card-title">Unit Details</h5>
+                    <h5 class="card-title">Specification Details</h5>
 
                     <!-- Horizontal Form -->
                     {{ form_start(form) }}
@@ -30,14 +30,14 @@
                         </div>
                     {% endif %}
                         <div class="row mb-3">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Unit Name</label>
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Specification</label>
                             <div class="col-sm-10">
                                 {{ form_row(form.name) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 label">
-                                <a href="{{ path('app_units_index') }}" class="btn btn-outline-secondary shadow-sm my-1">
+                                <a href="{{ path('app_specification_index') }}" class="btn btn-outline-secondary shadow-sm my-1">
                                     Back
                                 </a>
                                 {{ form_widget(form.save, {
@@ -54,18 +54,14 @@
     </section>
 </section>
 {% endblock %}
-
 {# {% extends 'base.html.twig' %}
 
-{% block title %}New Units{% endblock %}
+{% block title %}New Specification{% endblock %}
 
 {% block body %}
-    <h1>Create new Units</h1>
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+    <h1>Create new Specification</h1>
 
-    {{ include('units/_form.html.twig') }}
+    {{ include('specification/_form.html.twig') }}
 
-    <a href="{{ path('app_units_index') }}">back to list</a>
+    <a href="{{ path('app_specification_index') }}">back to list</a>
 {% endblock %} #}

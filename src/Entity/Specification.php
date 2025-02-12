@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ActivityCodeRepository;
+use App\Repository\SpecificationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: ActivityCodeRepository::class)]
-#[UniqueEntity(fields: ['activityCode'], message: 'This activity code already exists.')]
-class ActivityCode
+#[ORM\Entity(repositoryClass: SpecificationRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'This specification name already exists.')]
+class Specification
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,7 +18,7 @@ class ActivityCode
 
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank]
-    private ?string $activityCode = null;
+    private ?string $name = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -26,7 +26,7 @@ class ActivityCode
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activityCodes')]
+    #[ORM\ManyToOne(inversedBy: 'specifications')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $modifiedBy = null;
 
@@ -35,14 +35,14 @@ class ActivityCode
         return $this->id;
     }
 
-    public function getActivityCode(): ?string
+    public function getName(): ?string
     {
-        return $this->activityCode;
+        return $this->name;
     }
 
-    public function setActivityCode(string $activityCode): static
+    public function setName(string $name): static
     {
-        $this->activityCode = $activityCode;
+        $this->name = $name;
 
         return $this;
     }

@@ -60,11 +60,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: ActivityCode::class, mappedBy: 'modifiedBy')]
     private Collection $activityCodes;
 
+    /**
+     * @var Collection<int, Specification>
+     */
+    #[ORM\OneToMany(targetEntity: Specification::class, mappedBy: 'modifiedBy')]
+    private Collection $specifications;
+
     public function __construct()
     {
         // $this->userInfo = new UserInfo(); // Ensure Us
         $this->units = new ArrayCollection();
         $this->activityCodes = new ArrayCollection();
+        $this->specifications = new ArrayCollection();
     }
 
     public function setUserInfo(UserInfo $userInfo): self
@@ -239,6 +246,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($activityCode->getModifiedBy() === $this) {
                 $activityCode->setModifiedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Specification>
+     */
+    public function getSpecifications(): Collection
+    {
+        return $this->specifications;
+    }
+
+    public function addSpecification(Specification $specification): static
+    {
+        if (!$this->specifications->contains($specification)) {
+            $this->specifications->add($specification);
+            $specification->setModifiedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpecification(Specification $specification): static
+    {
+        if ($this->specifications->removeElement($specification)) {
+            // set the owning side to null (unless already changed)
+            if ($specification->getModifiedBy() === $this) {
+                $specification->setModifiedBy(null);
             }
         }
 
