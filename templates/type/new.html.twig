@@ -1,0 +1,74 @@
+{% extends 'page.html.twig' %}
+
+{% block title %}New Types{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="pagetitle">
+        <h1>New Types</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                <li class="breadcrumb-item"><a href="/type">Types</a></li>
+                <li class="breadcrumb-item active">New Types</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">Types Details</h5>
+
+                    <!-- Horizontal Form -->
+                    {{ form_start(form) }}
+                    {% if form_errors(form) %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
+                        <div class="row mb-3">
+                            <label for="specification" class="col-sm-2 col-form-label">Specification</label>
+                            <div class="col-sm-10">
+                                {{ form_row(form.specification) }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Types</label>
+                            <div class="col-sm-10">
+                                {{ form_row(form.name) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 label">
+                                <a href="{{ path('app_type_index') }}" class="btn btn-outline-secondary shadow-sm my-1">
+                                    Back
+                                </a>
+                                {{ form_widget(form.save, {
+                                    'attr': {'class': 'btn btn-primary my-1'},
+                                    'label': 'Save'
+                                }) }}
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+{% endblock %}
+
+{# {% extends 'base.html.twig' %}
+
+{% block title %}New Type{% endblock %}
+
+{% block body %}
+    <h1>Create new Type</h1>
+
+    {{ include('type/_form.html.twig') }}
+
+    <a href="{{ path('app_type_index') }}">back to list</a>
+{% endblock %} #}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SpecificationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,6 +31,17 @@ class Specification
     #[ORM\ManyToOne(inversedBy: 'specifications')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $modifiedBy = null;
+
+    /**
+     * @var Collection<int, Type>
+     */
+    #[ORM\OneToMany(targetEntity: Type::class, mappedBy: 'specification')]
+    private Collection $types;
+
+    public function __construct()
+    {
+        $this->types = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -79,6 +92,36 @@ class Specification
     public function setModifiedBy(?User $modifiedBy): static
     {
         $this->modifiedBy = $modifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Type>
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(Type $type): static
+    {
+        if (!$this->types->contains($type)) {
+            $this->types->add($type);
+            $type->setSpecification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): static
+    {
+        if ($this->types->removeElement($type)) {
+            // set the owning side to null (unless already changed)
+            if ($type->getSpecification() === $this) {
+                $type->setSpecification(null);
+            }
+        }
 
         return $this;
     }

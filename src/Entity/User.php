@@ -66,12 +66,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Specification::class, mappedBy: 'modifiedBy')]
     private Collection $specifications;
 
+    /**
+     * @var Collection<int, Type>
+     */
+    #[ORM\OneToMany(targetEntity: Type::class, mappedBy: 'modifiedBy')]
+    private Collection $types;
+
     public function __construct()
     {
         // $this->userInfo = new UserInfo(); // Ensure Us
         $this->units = new ArrayCollection();
         $this->activityCodes = new ArrayCollection();
         $this->specifications = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     public function setUserInfo(UserInfo $userInfo): self
@@ -276,6 +283,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($specification->getModifiedBy() === $this) {
                 $specification->setModifiedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Type>
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(Type $type): static
+    {
+        if (!$this->types->contains($type)) {
+            $this->types->add($type);
+            $type->setModifiedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): static
+    {
+        if ($this->types->removeElement($type)) {
+            // set the owning side to null (unless already changed)
+            if ($type->getModifiedBy() === $this) {
+                $type->setModifiedBy(null);
             }
         }
 
